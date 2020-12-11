@@ -1,0 +1,26 @@
+{
+  "name": "bdpc",
+  "version": "1.0.0",
+  "description": "Backend developer position challenge",
+  "main": "index.js",
+  "scripts": {
+    "start": "set NODE_ENV=&&nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajpy08/BDPC.git"
+  },
+  "author": "I.S.C. Angel Javier Puc Yamá",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ajpy08/BDPC/issues"
+  },
+  "homepage": "https://github.com/ajpy08/BDPC#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.6",
+    "nodemon": "^2.0.6"
+  }
+}
