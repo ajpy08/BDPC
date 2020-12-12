@@ -6,4 +6,10 @@ router.get('/', (req, res) => {
     });
 });
 
+const ApiKey = require('./apiKeys');
+router.use('/apiKey', ApiKey);
+
+const students = require('./students');
+router.use('/students', students);
+
 module.exports = router
