@@ -16,13 +16,9 @@ module.exports = {
                     }
                     return error;
                 }
-                if (autenticado === null || autenticado === undefined) {
-                    error = {
-                        ok: false,
-                        mensaje: 'ApiKey incorrecta',
-                        errors: {message: 'ApiKey Incorrecta'}
-                    }
-                    return ok
+                if (autenticado === null || autenticado === undefined || autenticado.length == 0) {
+                    ok = false;
+                    return ok;
                 } else {
                     ok = true
                     return ok
@@ -33,10 +29,7 @@ module.exports = {
                 error: error
             });
         }
-        return res.status(200).json({
-            ok: true,
-            uuid: uuid
-        });
+        return ok;
     },
     createApi: (req, res) => {
         const ApiKeys = uuidv4();

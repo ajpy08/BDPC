@@ -1,11 +1,11 @@
 const router = require('express').Router();
-const studentsController = require('../controllers/studentsController');
+const professorsController = require('../controllers/professorsController');
 const apiKey = require('../controllers/apiKeysController');
 
 router.get('/:uuid', async (req, res)=> {
     const keyAuthentication = await apiKey.listApi(req, res);
     if (keyAuthentication) {
-        studentsController.list(req, res);
+        professorsController.list(req, res);
     } else {
         return res.status(400).json({
             ok: false,
@@ -17,7 +17,7 @@ router.get('/:uuid', async (req, res)=> {
 router.post('/create/:uuid', async (req, res) => {
     const keyAuthentication = await apiKey.listApi(req, res);
     if (keyAuthentication) {
-        studentsController.insert(req, res);
+        professorsController.insert(req, res);
     } else {
         return res.status(400).json({
             ok: false,
@@ -29,7 +29,7 @@ router.post('/create/:uuid', async (req, res) => {
 router.put('/update/:uuid', async (req, res) => {
     const keyAuthentication = await apiKey.listApi(req, res);
     if (keyAuthentication) {
-        studentsController.update(req, res);
+        professorsController.update(req, res);
     } else {
         return res.status(400).json({
             ok: false,
@@ -41,7 +41,7 @@ router.put('/update/:uuid', async (req, res) => {
 router.delete('/delete/:uuid', async (req, res) => {
     const keyAuthentication = await apiKey.listApi(req, res);
     if (keyAuthentication) {
-        studentsController.delete(req, res);
+        professorsController.delete(req, res);
     } else {
         return res.status(400).json({
             ok: false,

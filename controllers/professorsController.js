@@ -1,8 +1,8 @@
-const Student = require('../models/student');
+const Professor = require('../models/professor');
 
 module.exports = {
     list: (req, res) => {
-        Student.find((err, student) => {
+        Professor.find((err, professor) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -10,12 +10,12 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json(student);
+            return res.status(200).json(professor);
         });
     },
     insert: (req, res) => {
-        const student = new Student(req.body);
-        student.save((err, studentCreate) => {
+        const professor = new Professor(req.body);
+        professor.save((err, professorCreate) => {
             if (err) {
                 res.status(400).json({
                     ok: false,
@@ -25,25 +25,24 @@ module.exports = {
             }
             return res.status(200).json({
                 ok: true,
-                student: studentCreate
+                professor: professorCreate
             });
         })
     },
     update: (req, res) => {
         const id = req.body._id;
-        Student.findById(id, (err, student) => {
+        Professor.findById(id, (err, professor) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
                     mensaje: 'Error al buscar registro',
                 });
             }
-            student.nombre = req.body.nombre !== undefined ? req.body.nombre : student.nombre;
-            student.email = req.body.email !== undefined ? req.body.email : student.email;
-            student.password = req.body.password !== undefined ? req.body.password : student.password;
-            student.curso = req.body.curso !== undefined ? req.body.curso : student.curso;
+            professor.nombre = req.body.nombre !== undefined ? req.body.nombre : professor.nombre;
+            professor.email = req.body.email !== undefined ? req.body.email : professor.email;
+            professor.password = req.body.password !== undefined ? req.body.password : professor.password;
 
-            student.save((err, studentUpdate) => {
+            professor.save((err, professorUpdate) => {
                 if (err) {
                     return res.status(400).json({
                         ok: false,
@@ -52,14 +51,14 @@ module.exports = {
                 }
                 res.status(200).json({
                     ok: true,
-                    student: studentUpdate
+                    professor: professorUpdate
                 });
             });
         });
     },
     delete: (req, res) => {
         const id = req.body._id;
-        Student.findByIdAndRemove(id, (err, studentDelete) => {
+        Professor.findByIdAndRemove(id, (err, professorDelete) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -68,7 +67,7 @@ module.exports = {
             }
             res.status(200).json({
                 ok: true,
-                student: studentDelete
+                professor: professorDelete
             });
         });
     }

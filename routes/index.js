@@ -12,4 +12,7 @@ router.use('/apiKey', ApiKey);
 const students = require('./students');
 router.use('/students', students);
 
+const professors = require('./professors');
+router.use('/professors', professors);
+
 module.exports = router
