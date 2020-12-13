@@ -1,4 +1,5 @@
 const Student = require('../models/student');
+const Course = require('../models/course');
 
 module.exports = {
     list: (req, res) => {
@@ -70,6 +71,19 @@ module.exports = {
                 ok: true,
                 student: studentDelete
             });
+        });
+    },
+    myCourses: (req, res) => {
+        var curso = req.query.curso;
+        Course.find({ noCurso: { $lte: curso } }, (err, cursos) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error al buscar registros',
+                    errors: err
+                });
+            }
+            return res.status(200).json(cursos);
         });
     }
 }

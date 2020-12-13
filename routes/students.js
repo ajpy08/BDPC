@@ -50,4 +50,17 @@ router.delete('/delete/:uuid', async (req, res) => {
     }
 });
 
+router.get('/my-courses/:uuid', async (req, res)=> {
+    const keyAuthentication = await apiKey.listApi(req, res);
+    if (keyAuthentication) {
+        studentsController.myCourses(req, res);
+    } else {
+        return res.status(400).json({
+            ok: false,
+            mensaje: 'Error de Autenticación ApiKey',
+        });
+    }
+});
+
+
 module.exports = router;
