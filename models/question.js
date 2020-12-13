@@ -2,18 +2,17 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 var Varias = require("../public/varias");
 
-var subSchemaAnswer = new Schema(
-  {
-    answer: { type: String },
-  },
-  { _id: false }
-);
+const tiposValidos = {
+  values: ["Boolean", "Multiple1", "MultipleAll"],
+  message: "{VALUE} No es un tipo permitido",
+};
 
 const questionSchema = new Schema(
   {
     titulo: { type: String, required: [true, "El titulo es necesario"] },
+    tipoCalificacion: { type: String, required: true, default: 'Boolean', enum: tiposValidos },
     score: { type: mongoose.Types.Decimal128, required: true, get: Varias.getDecimal },
-    answers: [subSchemaAnswer],
+    answers: [Schema.Types.Mixed],
   },
   { collection: "questions" }
 );
