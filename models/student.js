@@ -6,7 +6,7 @@ const rolesValidos = {
   message: "{VALUE} No es un rol permitido",
 };
 
-var subSchemaCourses = new Schema(
+const subSchemaCourses = new Schema(
   {
     course: { type: Schema.Types.ObjectId, ref: "Course" },
   },

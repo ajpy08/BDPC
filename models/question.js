@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-var Varias = require("../public/varias");
+const Varias = require("../public/varias");
 
 const tiposValidos = {
   values: ["Boolean", "Multiple1", "MultipleAll"],

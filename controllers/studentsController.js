@@ -77,7 +77,7 @@ module.exports = {
         });
     },
     getMyCourses: (req, res) => {
-        var student = req.query.student;
+        const student = req.query.student;
         Student.findById(student, (err, student) => {
             if (err) {
                 return res.status(400).json({
@@ -101,7 +101,7 @@ module.exports = {
         });
     },
     // getMyCourses: (req, res) => {
-    //     var curso = req.query.curso;
+    //     const curso = req.query.curso;
     //     Course.find({ noCurso: { $lte: curso } }, (err, cursos) => {
     //         if (err) {
     //             return res.status(400).json({

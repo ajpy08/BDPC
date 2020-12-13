@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-var Varias = require("../public/varias");
-var calificacionMin = require('../config/config').calificacionMin;
+const Varias = require("../public/varias");
+const calificacionMin = require('../config/config').calificacionMin;
 
-var subSchemaQuestions = new Schema(
+const subSchemaQuestions = new Schema(
   {
     question: { type: Schema.Types.ObjectId, ref: "Question" },
   },

@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-var Varias = require("../public/varias");
+const Varias = require("../public/varias");
 
-var subSchemaLessons = new Schema(
+const subSchemaLessons = new Schema(
   {
     lesson: { type: Schema.Types.ObjectId, ref: 'Lesson' }
   },
