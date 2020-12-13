@@ -11,7 +11,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json(student);
+            return res.status(200).json({ student });
         });
     },
     insert: (req, res) => {
@@ -24,10 +24,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json({
-                ok: true,
-                student: studentCreate
-            });
+            return res.status(200).json({ studentCreate });
         })
     },
     update: (req, res) => {
@@ -98,9 +95,7 @@ module.exports = {
                             errors: err
                         });
                     }
-                    return res.status(200).json({
-                        cursos
-                    });
+                    return res.status(200).json({ cursos });
                 });
             }
         });
@@ -115,7 +110,7 @@ module.exports = {
     //                 errors: err
     //             });
     //         }
-    //         return res.status(200).json(cursos);
+    //         return res.status(200).json({cursos});
     //     });
     // },
     getMyLessons: (req, res) => {
@@ -150,7 +145,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json(courses);
+            return res.status(200).json({courses});
         })
             .populate('lessons.lesson', 'nombre consecutivo');
     }
@@ -186,7 +181,7 @@ module.exports = {
     //                 errors: err
     //             });
     //         }
-    //         return res.status(200).json(courses);
+    //         return res.status(200).json({courses});
     //     })
     //     .populate('lessons.lesson', 'nombre consecutivo');
     // }

@@ -10,7 +10,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json(question);
+            return res.status(200).json({ question });
         });
     },
     insert: (req, res) => {
@@ -23,10 +23,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json({
-                ok: true,
-                question: questionCreate
-            });
+            return res.status(200).json({ questionCreate });
         })
     },
     update: (req, res) => {

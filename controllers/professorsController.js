@@ -10,7 +10,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json(professor);
+            return res.status(200).json({ professor });
         });
     },
     insert: (req, res) => {
@@ -23,10 +23,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json({
-                ok: true,
-                professor: professorCreate
-            });
+            return res.status(200).json({ professorCreate });
         })
     },
     update: (req, res) => {

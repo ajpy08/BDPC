@@ -10,7 +10,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json(lesson);
+            return res.status(200).json({ lesson });
         });
     },
     insert: (req, res) => {
@@ -23,10 +23,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json({
-                ok: true,
-                lesson: lessonCreate
-            });
+            return res.status(200).json({ lessonCreate });
         })
     },
     update: (req, res) => {

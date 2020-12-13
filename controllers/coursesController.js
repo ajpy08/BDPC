@@ -10,7 +10,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json(course);
+            return res.status(200).json({ course });
         });
     },
     insert: (req, res) => {
@@ -23,10 +23,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json({
-                ok: true,
-                course: courseCreate
-            });
+            return res.status(200).json({ courseCreate });
         })
     },
     update: (req, res) => {
@@ -75,5 +72,5 @@ module.exports = {
             });
         });
     },
-    
+
 }
