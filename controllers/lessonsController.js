@@ -41,7 +41,8 @@ module.exports = {
             lesson.nombre = req.body.nombre !== undefined ? req.body.nombre : lesson.nombre;
             lesson.consecutivo = req.body.consecutivo !== undefined ? req.body.consecutivo : lesson.consecutivo;
             lesson.calificacionMin = req.body.calificacionMin !== undefined ? req.body.calificacionMin : lesson.calificacionMin;
-            if (req.body.questions && req.body.questions.lenght > 0) {
+            lesson.course = req.body.course !== undefined ? req.body.course : lesson.course;
+            if (req.body.questions && req.body.questions.length > 0) {
                 lesson.questions = req.body.questions;
             } else {
                 lesson.questions = undefined;

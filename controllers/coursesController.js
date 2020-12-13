@@ -41,7 +41,7 @@ module.exports = {
             // course.nombre = req.body.nombre !== undefined ? req.body.nombre : course.nombre;
             course.noCurso = req.body.noCurso !== undefined ? req.body.noCurso : course.noCurso;
             if (req.body.lessons && req.body.lessons.length > 0) {
-                course.lessons = req.body.lessons; 
+                course.lessons = req.body.lessons;
             } else {
                 course.lessons = undefined;
             }
@@ -74,5 +74,6 @@ module.exports = {
                 course: courseDelete
             });
         });
-    }
+    },
+    
 }

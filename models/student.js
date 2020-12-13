@@ -6,6 +6,13 @@ const rolesValidos = {
   message: "{VALUE} No es un rol permitido",
 };
 
+var subSchemaCourses = new Schema(
+  {
+    course: { type: Schema.Types.ObjectId, ref: "Course" },
+  },
+  { _id: false }
+);
+
 const studentSchema = new Schema(
   {
     nombre: { type: String, required: [true, "El nombre es necesario"] },
@@ -13,6 +20,7 @@ const studentSchema = new Schema(
     password: { type: String, required: [true, "La contraseña es necesaria"] },
     role: { type: String, required: true, default: 'ESTUDIANTE_ROLE', enum: rolesValidos },
     curso: { type: Number, required: true, default: 1 },
+    courses: [subSchemaCourses],
     // usuarioAlta: { type: Schema.Types.ObjectId, ref: "Professor" },
     // fAlta: { type: Date, default: Date.now },
     // usuarioMod: { type: Schema.Types.ObjectId, ref: "Professor" },

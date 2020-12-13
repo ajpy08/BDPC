@@ -44,6 +44,12 @@ module.exports = {
             student.password = req.body.password !== undefined ? req.body.password : student.password;
             student.curso = req.body.curso !== undefined ? req.body.curso : student.curso;
 
+            if (req.body.courses && req.body.courses.length > 0) {
+                student.courses = req.body.courses;
+            } else {
+                student.courses = undefined;
+            }
+
             student.save((err, studentUpdate) => {
                 if (err) {
                     return res.status(400).json({
@@ -73,9 +79,9 @@ module.exports = {
             });
         });
     },
-    myCourses: (req, res) => {
-        var curso = req.query.curso;
-        Course.find({ noCurso: { $lte: curso } }, (err, cursos) => {
+    getMyCourses: (req, res) => {
+        var student = req.query.student;
+        Student.findById(student, (err, student) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -83,7 +89,105 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json(cursos);
+            if (student) {
+                Course.find({ noCurso: { $lte: student.curso } }, (err, cursos) => {
+                    if (err) {
+                        return res.status(400).json({
+                            ok: false,
+                            mensaje: 'Error al buscar registros',
+                            errors: err
+                        });
+                    }
+                    return res.status(200).json({
+                        cursos
+                    });
+                });
+            }
         });
+    },
+    // getMyCourses: (req, res) => {
+    //     var curso = req.query.curso;
+    //     Course.find({ noCurso: { $lte: curso } }, (err, cursos) => {
+    //         if (err) {
+    //             return res.status(400).json({
+    //                 ok: false,
+    //                 mensaje: 'Error al buscar registros',
+    //                 errors: err
+    //             });
+    //         }
+    //         return res.status(200).json(cursos);
+    //     });
+    // },
+    getMyLessons: (req, res) => {
+        const course = req.query.course;
+        const student = req.query.student;
+        let filtro = '{';
+
+        if (course != undefined && course != '')
+            filtro += '\"_id\":' + '\"' + course + '\",';
+        if (student != undefined && student != '')
+            filtro += '\"student\":' + '\"' + student + '\",';
+
+        if (filtro != '{')
+            filtro = filtro.slice(0, -1);
+        filtro = filtro + '}';
+
+        const jsonFilter = JSON.parse(filtro);
+
+        let filtroAggregation = '{';
+
+        filtroAggregation += '\"lessons\":' + 1;
+
+        filtroAggregation = filtroAggregation + '}';
+
+        const jsonAggregation = JSON.parse(filtroAggregation);
+
+        Course.find(jsonFilter, jsonAggregation, (err, courses) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error al buscar registros',
+                    errors: err
+                });
+            }
+            return res.status(200).json(courses);
+        })
+            .populate('lessons.lesson', 'nombre consecutivo');
     }
+    // getMyLessons: (req, res) => {
+    //     const course = req.query.course;
+    //     const student = req.query.student;
+    //     let filtro = '{';
+
+    //     if (course != undefined && course != '')
+    //         filtro += '\"_id\":' + '\"' + course + '\",';
+    //     if (student != undefined && student != '')
+    //         filtro += '\"student\":' + '\"' + student + '\",';
+
+    //     if (filtro != '{')
+    //         filtro = filtro.slice(0, -1);
+    //     filtro = filtro + '}';
+
+    //     const jsonFilter = JSON.parse(filtro);
+
+    //     let filtroAggregation = '{';
+
+    //     filtroAggregation += '\"lessons\":' + 1;
+
+    //     filtroAggregation = filtroAggregation + '}';
+
+    //     const jsonAggregation = JSON.parse(filtroAggregation);
+
+    //     Course.find(jsonFilter, jsonAggregation, (err, courses) => {
+    //         if (err) {
+    //             return res.status(400).json({
+    //                 ok: false,
+    //                 mensaje: 'Error al buscar registros',
+    //                 errors: err
+    //             });
+    //         }
+    //         return res.status(200).json(courses);
+    //     })
+    //     .populate('lessons.lesson', 'nombre consecutivo');
+    // }
 }
