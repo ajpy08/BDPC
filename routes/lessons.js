@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const lessonsController = require('../controllers/lessonsController');
 const apiKey = require('../controllers/apiKeysController');
+const ROLES = require('../config/config').ROLES;
 
 router.get('/:uuid', async (req, res)=> {
     // le paso por query el usuario loggeado que debo recibir del front para hacerlo sencillo,
@@ -87,6 +88,44 @@ router.get('/lessons-by-course/:uuid', async (req, res)=> {
     if (keyAuthentication) {
         if (userLogged.role === ROLES.PROFESOR_ROLE) {
             lessonsController.getLessonsByCourse(req, res);
+        } else{
+            return res.status(400).json({
+                mensaje: 'Solo los profesores pueden realizar esta acción',
+            });
+        }
+    } else {
+        return res.status(400).json({
+            ok: false,
+            mensaje: 'Error de Autenticación ApiKey',
+        });
+    }
+});
+
+router.get('/lesson/:uuid', async (req, res)=> {
+    const userLogged = req.body.userLogged;
+    const keyAuthentication = await apiKey.listApi(req, res);
+    if (keyAuthentication) {
+        if (userLogged.role === ROLES.PROFESOR_ROLE) {
+            lessonsController.getLessonDetails(req, res);
+        } else{
+            return res.status(400).json({
+                mensaje: 'Solo los profesores pueden realizar esta acción',
+            });
+        }
+    } else {
+        return res.status(400).json({
+            ok: false,
+            mensaje: 'Error de Autenticación ApiKey',
+        });
+    }
+});
+
+router.get('/grade/:uuid', async (req, res)=> {
+    const userLogged = req.body.userLogged;
+    const keyAuthentication = await apiKey.listApi(req, res);
+    if (keyAuthentication) {
+        if (userLogged.role === ROLES.PROFESOR_ROLE) {
+            lessonsController.gradeLesson(req, res);
         } else{
             return res.status(400).json({
                 mensaje: 'Solo los profesores pueden realizar esta acción',
