@@ -1,23 +1,39 @@
 const router = require('express').Router();
 const coursesController = require('../controllers/coursesController');
 const apiKey = require('../controllers/apiKeysController');
+const ROLES = require('../config/config').ROLES;
 
 router.get('/:uuid', async (req, res)=> {
+    // le paso por query el usuario loggeado para hacerlo sencillo,
+    // normalmente usaria JWToken y cuando valide el token traigo el user en el metodo verify
+    const userLogged = req.body.userLogged;
     const keyAuthentication = await apiKey.listApi(req, res);
     if (keyAuthentication) {
-        coursesController.list(req, res);
+        if (userLogged.role === ROLES.PROFESOR_ROLE) {
+            coursesController.list(req, res);
+        } else{
+            return res.status(400).json({
+                mensaje: 'Solo los profesores pueden realizar esta acción',
+            });
+        }
     } else {
         return res.status(400).json({
-            ok: false,
             mensaje: 'Error de Autenticación ApiKey',
         });
     }
 });
 
 router.post('/create/:uuid', async (req, res) => {
+    const userLogged = req.body.userLogged;
     const keyAuthentication = await apiKey.listApi(req, res);
     if (keyAuthentication) {
-        coursesController.insert(req, res);
+        if (userLogged.role === ROLES.PROFESOR_ROLE) {
+            coursesController.insert(req, res);
+        } else{
+            return res.status(400).json({
+                mensaje: 'Solo los profesores pueden realizar esta acción',
+            });
+        }
     } else {
         return res.status(400).json({
             ok: false,
@@ -27,9 +43,16 @@ router.post('/create/:uuid', async (req, res) => {
 });
 
 router.put('/update/:uuid', async (req, res) => {
+    const userLogged = req.body.userLogged;
     const keyAuthentication = await apiKey.listApi(req, res);
     if (keyAuthentication) {
-        coursesController.update(req, res);
+        if (userLogged.role === ROLES.PROFESOR_ROLE) {
+            coursesController.update(req, res);
+        } else{
+            return res.status(400).json({
+                mensaje: 'Solo los profesores pueden realizar esta acción',
+            });
+        }
     } else {
         return res.status(400).json({
             ok: false,
@@ -39,9 +62,16 @@ router.put('/update/:uuid', async (req, res) => {
 })
 
 router.delete('/delete/:uuid', async (req, res) => {
+    const userLogged = req.body.userLogged;
     const keyAuthentication = await apiKey.listApi(req, res);
     if (keyAuthentication) {
-        coursesController.delete(req, res);
+        if (userLogged.role === ROLES.PROFESOR_ROLE) {
+            coursesController.delete(req, res);
+        } else{
+            return res.status(400).json({
+                mensaje: 'Solo los profesores pueden realizar esta acción',
+            });
+        }
     } else {
         return res.status(400).json({
             ok: false,

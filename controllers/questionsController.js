@@ -33,6 +33,7 @@ module.exports = {
                 return res.status(400).json({
                     ok: false,
                     mensaje: 'Error al buscar registro',
+                    errors: err
                 });
             }
             question.titulo = req.body.titulo !== undefined ? req.body.titulo : question.titulo;
@@ -49,6 +50,7 @@ module.exports = {
                     return res.status(400).json({
                         ok: false,
                         mensaje: 'Error al actualizar registro',
+                        errors: err
                     });
                 }
                 res.status(200).json({
@@ -64,7 +66,8 @@ module.exports = {
             if (err) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'Error al eliminar registro'
+                    mensaje: 'Error al eliminar registro',
+                    errors: err
                 });
             }
             res.status(200).json({

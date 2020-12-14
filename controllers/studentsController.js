@@ -34,6 +34,7 @@ module.exports = {
                 return res.status(400).json({
                     ok: false,
                     mensaje: 'Error al buscar registro',
+                    errors: err
                 });
             }
             student.nombre = req.body.nombre !== undefined ? req.body.nombre : student.nombre;
@@ -52,6 +53,7 @@ module.exports = {
                     return res.status(400).json({
                         ok: false,
                         mensaje: 'Error al actualizar registro',
+                        errors: err
                     });
                 }
                 res.status(200).json({
@@ -67,7 +69,8 @@ module.exports = {
             if (err) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'Error al eliminar registro'
+                    mensaje: 'Error al eliminar registro',
+                    errors: err
                 });
             }
             res.status(200).json({
@@ -113,53 +116,4 @@ module.exports = {
             return res.status(200).json({ students });
         });
     },
-    // getMyCourses: (req, res) => {
-    //     const curso = req.query.curso;
-    //     Course.find({ noCurso: { $lte: curso } }, (err, cursos) => {
-    //         if (err) {
-    //             return res.status(400).json({
-    //                 ok: false,
-    //                 mensaje: 'Error al buscar registros',
-    //                 errors: err
-    //             });
-    //         }
-    //         return res.status(200).json({cursos});
-    //     });
-    // },    
-    // getMyLessons: (req, res) => {
-    //     const course = req.query.course;
-    //     const student = req.query.student;
-    //     let filtro = '{';
-
-    //     if (course != undefined && course != '')
-    //         filtro += '\"_id\":' + '\"' + course + '\",';
-    //     if (student != undefined && student != '')
-    //         filtro += '\"student\":' + '\"' + student + '\",';
-
-    //     if (filtro != '{')
-    //         filtro = filtro.slice(0, -1);
-    //     filtro = filtro + '}';
-
-    //     const jsonFilter = JSON.parse(filtro);
-
-    //     let filtroAggregation = '{';
-
-    //     filtroAggregation += '\"lessons\":' + 1;
-
-    //     filtroAggregation = filtroAggregation + '}';
-
-    //     const jsonAggregation = JSON.parse(filtroAggregation);
-
-    //     Course.find(jsonFilter, jsonAggregation, (err, courses) => {
-    //         if (err) {
-    //             return res.status(400).json({
-    //                 ok: false,
-    //                 mensaje: 'Error al buscar registros',
-    //                 errors: err
-    //             });
-    //         }
-    //         return res.status(200).json({courses});
-    //     })
-    //     .populate('lessons.lesson', 'nombre consecutivo');
-    // }
 }
