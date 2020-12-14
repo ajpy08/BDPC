@@ -6,4 +6,22 @@ router.get('/', (req, res) => {
     });
 });
 
+const ApiKey = require('./apiKeys');
+router.use('/apiKey', ApiKey);
+
+const students = require('./students');
+router.use('/students', students);
+
+const professors = require('./professors');
+router.use('/professors', professors);
+
+const courses = require('./courses');
+router.use('/courses', courses);
+
+const lessons = require('./lessons');
+router.use('/lessons', lessons);
+
+const questions = require('./questions');
+router.use('/questions', questions);
+
 module.exports = router

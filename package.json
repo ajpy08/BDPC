@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "set NODE_ENV=&&nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --inspect index.js",
+    "build": "ng build --prod --aot"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,8 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "mongoose": "^5.11.6",
-    "nodemon": "^2.0.6"
+    "mongoose-unique-validator": "^2.0.3",
+    "nodemon": "^2.0.6",
+    "uuid": "^8.3.2"
   }
 }
