@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const Varias = require("../public/varias");
 
 const tiposValidos = {
-  values: ["Boolean", "Multiple1", "MultipleAll"],
+  values: ["Boolean", "Multiple1", "MultipleV", "MultipleAll"],
   message: "{VALUE} No es un tipo permitido",
 };
 

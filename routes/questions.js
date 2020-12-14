@@ -3,7 +3,8 @@ const questionsController = require('../controllers/questionsController');
 const apiKey = require('../controllers/apiKeysController');
 
 router.get('/:uuid', async (req, res)=> {
-    // le paso por query el usuario loggeado para hacerlo sencillo,
+    // le paso por query el usuario loggeado que debo recibir del front para hacerlo sencillo,
+    // no valido que exista ya que el request debe venir de un usuario logueado
     // normalmente usaria JWToken y cuando valide el token traigo el user en el metodo verify
     const userLogged = req.body.userLogged;
     const keyAuthentication = await apiKey.listApi(req, res);
