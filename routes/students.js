@@ -62,10 +62,10 @@ router.get('/my-courses/:uuid', async (req, res)=> {
     }
 });
 
-router.get('/my-lessons/:uuid', async (req, res)=> {
+router.get('/students-in-a-course/:uuid', async (req, res)=> {
     const keyAuthentication = await apiKey.listApi(req, res);
     if (keyAuthentication) {
-        studentsController.getMyLessons(req, res);
+        studentsController.getStudentsInACourse(req, res);
     } else {
         return res.status(400).json({
             ok: false,

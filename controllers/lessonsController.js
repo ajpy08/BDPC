@@ -1,4 +1,5 @@
 const Lesson = require('../models/lesson');
+const Student = require('../models/student');
 
 module.exports = {
     list: (req, res) => {
@@ -71,6 +72,47 @@ module.exports = {
             res.status(200).json({
                 ok: true,
                 lesson: lessonDelete
+            });
+        });
+    },
+    getLessonsByCourse: (req, res) => {
+        const course = req.query.course;
+        let filtro = '{';
+
+        if (course != undefined && course != '')
+            filtro += '\"course\":' + '\"' + course + '\",';
+
+        if (filtro != '{')
+            filtro = filtro.slice(0, -1);
+        filtro = filtro + '}';
+
+        const jsonFilter = JSON.parse(filtro);
+
+        // let filtroAggregation = '{';
+
+        // filtroAggregation += '\"lessons\":' + 1;
+
+        // filtroAggregation = filtroAggregation + '}';
+
+        // const jsonAggregation = JSON.parse(filtroAggregation);
+
+        Lesson.find(jsonFilter, (err, lessons) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error al buscar registros',
+                    errors: err
+                });
+            }
+            Student.find({ "courses": { $elemMatch: { course: course } } }, (err, students) => {
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: 'Error al buscar registros',
+                        errors: err
+                    });
+                }
+                return res.status(200).json({ lessons, studentsAccess : students });
             });
         });
     }

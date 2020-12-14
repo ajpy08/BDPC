@@ -3,7 +3,7 @@ const Course = require('../models/course');
 
 module.exports = {
     list: (req, res) => {
-        Student.find((err, student) => {
+        Student.find((err, students) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -11,7 +11,7 @@ module.exports = {
                     errors: err
                 });
             }
-            return res.status(200).json({ student });
+            return res.status(200).json({ students });
         });
     },
     insert: (req, res) => {
@@ -100,6 +100,19 @@ module.exports = {
             }
         });
     },
+    getStudentsInACourse: (req, res) => {
+        const course = req.query.course;
+        Student.find({ "courses": { $elemMatch: { course: course } } }, (err, students) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error al buscar registros',
+                    errors: err
+                });
+            }
+            return res.status(200).json({ students });
+        });
+    },
     // getMyCourses: (req, res) => {
     //     const curso = req.query.curso;
     //     Course.find({ noCurso: { $lte: curso } }, (err, cursos) => {
@@ -112,43 +125,7 @@ module.exports = {
     //         }
     //         return res.status(200).json({cursos});
     //     });
-    // },
-    getMyLessons: (req, res) => {
-        const course = req.query.course;
-        const student = req.query.student;
-        let filtro = '{';
-
-        if (course != undefined && course != '')
-            filtro += '\"_id\":' + '\"' + course + '\",';
-        if (student != undefined && student != '')
-            filtro += '\"student\":' + '\"' + student + '\",';
-
-        if (filtro != '{')
-            filtro = filtro.slice(0, -1);
-        filtro = filtro + '}';
-
-        const jsonFilter = JSON.parse(filtro);
-
-        let filtroAggregation = '{';
-
-        filtroAggregation += '\"lessons\":' + 1;
-
-        filtroAggregation = filtroAggregation + '}';
-
-        const jsonAggregation = JSON.parse(filtroAggregation);
-
-        Course.find(jsonFilter, jsonAggregation, (err, courses) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    mensaje: 'Error al buscar registros',
-                    errors: err
-                });
-            }
-            return res.status(200).json({courses});
-        })
-            .populate('lessons.lesson', 'nombre consecutivo');
-    }
+    // },    
     // getMyLessons: (req, res) => {
     //     const course = req.query.course;
     //     const student = req.query.student;
