@@ -9,6 +9,8 @@ const rolesValidos = {
 const subSchemaCourses = new Schema(
   {
     course: { type: Schema.Types.ObjectId, ref: "Course" },
+    calificacion: { type: Number },
+    aprobado: { type: Boolean },
   },
   { _id: false }
 );

@@ -1,5 +1,8 @@
 const Lesson = require('../models/lesson');
 const Student = require('../models/student');
+const Course = require('../models/course');
+const mongoose = require('mongoose');
+const calificacionMin = require('../config/config').calificacionMin;
 
 module.exports = {
     list: (req, res) => {
@@ -133,12 +136,14 @@ module.exports = {
         });
     },
     gradeLesson: (req, res) => {
+        const userLogged = req.body.userLogged;
         const answers = req.body.answers;
         const id = req.query.id;
         let calificacion = 0;
-        let aprobado;
+        let aprobado = false;
 
         Lesson.findById(id)
+            .populate("course", "noCurso")
             .populate("questions.question", "titulo tipoCalificacion score answers")
             .exec((err, lesson) => {
                 if (err) {
@@ -184,7 +189,7 @@ module.exports = {
                                             }
                                         });
                                         if (ok) {
-                                            calificacion += parseFloat(correcta.score);                                            
+                                            calificacion += parseFloat(correcta.score);
                                         }
                                         break;
                                     default:
@@ -193,19 +198,76 @@ module.exports = {
                             }
                         });
                     });
-                    console.log(calificacion);
+
+                    if (calificacion >= calificacionMin) {
+
+                        ///////////VALIDA QUE TODAS LAS LECCIONES HAN SIDO APROBADAS///////////////
+
+                        Student.updateOne({ "courses.course": lesson.course._id },
+                            {
+                                $set: { "courses.$.calificacion": calificacion },
+                                $set: { "courses.$.aprobado": true }
+                            }, (err, studentActualizado) => {
+                                if (err) {
+                                    return res.status(500).json({
+                                        ok: false,
+                                        mensaje: 'Error al actualizar registro',
+                                        errors: err
+                                    });
+                                }
+
+                                if (!studentActualizado) {
+                                    return res.status(400).json({
+                                        ok: false,
+                                        mensaje: 'No existe un registro con ese id',
+                                        errors: { message: 'No existe un registro con ese id' }
+                                    });
+                                }
+
+                                ///////////////////////CAMBIO AL ALUMNO DE CURSO///////////////////////////
+                                Course.findOne({ noCurso: lesson.course.noCurso + 1 }, (err, course) => {
+                                    if (err) {
+                                        return res.status(400).json({
+                                            ok: false,
+                                            mensaje: 'Error al buscar registro',
+                                            errors: err
+                                        });
+                                    }
+
+                                    Student.updateOne({ "_id": userLogged._id },
+                                        { $push: { courses: { course: new mongoose.Types.ObjectId(course._id) } }, curso: course.noCurso }, (err, studentActualizado) => {
+                                            if (err) {
+                                                return res.status(500).json({
+                                                    ok: false,
+                                                    mensaje: 'Error al borrar solicitud',
+                                                    errors: err
+                                                });
+                                            }
+
+                                            if (!studentActualizado) {
+                                                return res.status(400).json({
+                                                    ok: false,
+                                                    mensaje: 'No existe un estudiante con ese id',
+                                                    errors: { message: 'No existe un estudiante con ese id' }
+                                                });
+                                            }
+
+                                            return res.status(200).json({
+                                                message: 'Estimado ' + studentActualizado.nombre + ' aprobaste el curso ' + lesson.course.noCurso +
+                                                    ' con una calificación de ' + calificacion + " FELICIDADES!!!"
+                                            });
+                                        });
+                                });
+                                ///////////////////////////////////////////////////////////////////////////
+                            });
+                        ///////////////////////////////////////////////////////////////////////////
+                    }
                 } else {
                     return res.status(400).json({
                         ok: false,
                         mensaje: 'Debes responder todas las preguntas'
                     });
                 }
-
-
-
-                // lesson.questions.forEach(q => {
-
-                // });
             });
     }
 }
