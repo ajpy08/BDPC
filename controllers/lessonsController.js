@@ -140,7 +140,6 @@ module.exports = {
         const answers = req.body.answers;
         const id = req.query.id;
         let calificacion = 0;
-        let aprobado = false;
 
         Lesson.findById(id)
             .populate("course", "noCurso")
