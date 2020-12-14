@@ -81,4 +81,22 @@ router.delete('/delete/:uuid', async (req, res) => {
     }
 });
 
+router.get('/courses-students/:uuid', async (req, res)=> {
+    const userLogged = req.body.userLogged;
+    const keyAuthentication = await apiKey.listApi(req, res);
+    if (keyAuthentication) {
+        if (userLogged.role === ROLES.PROFESOR_ROLE) {
+            coursesController.getCoursesStudents(req, res);
+        } else{
+            return res.status(400).json({
+                mensaje: 'Solo los profesores pueden realizar esta acción',
+            });
+        }
+    } else {
+        return res.status(400).json({
+            mensaje: 'Error de Autenticación ApiKey',
+        });
+    }
+});
+
 module.exports = router;

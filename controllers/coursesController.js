@@ -1,4 +1,6 @@
 const Course = require('../models/course');
+const Student = require('../models/student');
+const Varias = require("../public/varias");
 
 module.exports = {
     list: (req, res) => {
@@ -75,5 +77,38 @@ module.exports = {
             });
         });
     },
+    getCoursesStudents: (req, res) => {
+        let resp = [];
+        Course.find(async(err, courses) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error al buscar registros',
+                    errors: err
+                });
+            }
 
+            const start = async () => {
+                await Varias.asyncForEach(courses, async (c) => {
+                    await Student.find({ "courses": { $elemMatch: { course: c._id } } }, (err, students) => {
+                        if (err) {
+                            return res.status(400).json({
+                                ok: false,
+                                mensaje: 'Error al buscar registros',
+                                errors: err
+                            });
+                        }
+                        if (students.length > 0) {
+                            resp.push({
+                                course: c,
+                                students: students
+                            });
+                        }
+                    });
+                });
+            };
+            await start();
+            return res.status(200).json({ cursos: resp });
+        });
+    }
 }
